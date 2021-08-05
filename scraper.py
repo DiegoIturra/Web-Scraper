@@ -1,9 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
 class Scraper:
 
 	URL = "https://literaturalibertad.com/collections/all?page="
+	mainURL = "https://literaturalibertad.com"
 	
 	#Get name for every book
 	def __getBookName(self,soup):
@@ -31,23 +33,19 @@ class Scraper:
 		return int(textList[len(textList)-1])
 
 	#Get the link to the book data
-	def __getBookPath(self,soup):
+	def __getBookLink(self,soup):
 		return [path['href'] for path in soup.find_all('a',{'class':'grid-view-item__link grid-view-item__image-container full-width-link'})]
 		
-
-	#Get the image path from each book
-	def __getImagePath(self,soup):
-		pass
-
-
+	
 	#Get data from all pages
-	def doScraping(self):
+	def scrapingData(self):
 		request = requests.get(self.URL)
 		soup = BeautifulSoup(request.text,'html.parser')
 
 		numPages = self.__getTotalPages(soup)
-		bookNames = []
+		bookTitles = []
 		bookPrices = []
+		bookLinks = []
 		for page in range(1,numPages+1):
 			url = self.URL + str(page)
 			request = requests.get(url)
@@ -55,15 +53,26 @@ class Scraper:
 			
 			currentBookNames = self.__getBookName(soup)
 			currentBookPrices = self.__getBookPrices(soup)
+			currentBookLinks = self.__getBookLink(soup)
 
+			#get title of books
 			for currentName in currentBookNames:
-				bookNames.append(currentName)
+				bookTitles.append(currentName)
 			
+			#get prices of books
 			for currentPrice in currentBookPrices:
 				bookPrices.append(currentPrice)
+
+			#get links of books
+			for currentLink in currentBookLinks:
+				bookLinks.append(self.mainURL + currentLink)
+
+		#list of dictionaries
+		data = [{'title':title, 'price': price, 'link': link} for title, price, link in zip(bookTitles, bookPrices, bookLinks)]
 		
-		dictionary = dict(zip(bookNames,bookPrices))
-		return dictionary
+		return data
+
+
 
 
 class Utils:
@@ -71,7 +80,7 @@ class Utils:
 	@staticmethod
 	def translateText(text):
 		""" method to translate latin characters """
-		charsToTranslate = "ÁÉÍÓÚáéíóoúñ"
+		charsToTranslate = "ÁÉÍÓÚáéíóúñ"
 		objectiveText = "AEIOUaeioun"
 		try:
 			translation = str.maketrans(charsToTranslate,objectiveText)
@@ -79,4 +88,5 @@ class Utils:
 		except:
 			return text
 		
+
 

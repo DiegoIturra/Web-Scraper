@@ -1,12 +1,13 @@
-from flask import Flask
+from flask import Flask,jsonify
 from scraper import Scraper
+from flask_apscheduler import APScheduler
 
-app = Flask(__name__)
 
-@app.route('/')
-def index():
-	scraperObject = Scraper()
-	return scraperObject.doScraping()
+if __name__ == "__main__":
 
-if __name__ == '__main__':
-	app.run(debug=True)
+	scraper = Scraper()
+	data = scraper.scrapingData()
+
+	for dictionary in data:
+		print(f"{dictionary['title']} => {dictionary['price']} => {dictionary['link']}")
+
