@@ -4,7 +4,7 @@ from extensions import db,marshmallow
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False)
-    title_for_route = Column(db.String(40), nullable=False)
+    title_for_route = db.Column(db.String(40), nullable=False)
     price = db.Column(db.String(40), nullable=False)
     url = db.Column(db.String(40), nullable=False)
 

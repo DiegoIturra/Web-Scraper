@@ -23,8 +23,7 @@ def get_books_by_id(id):
 @main.route("/book/<title>", methods=['GET'])
 def get_books_by_title(title):
     """ Title should be parsed without spaces """
-    book = Book.query.filter_by(title=title).first()
-    print(book)
+    book = Book.query.filter_by(title_for_route=title).first()
     book_schema = BookSchema()
     output = book_schema.dump(book)
     return jsonify(output)

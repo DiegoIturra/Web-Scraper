@@ -1,5 +1,11 @@
 from flask import Flask
 from extensions import (db,scheduler,marshmallow)
+from sqlalchemy_utils.functions import database_exists
+
+
+def createDB(database_path,database):
+    if not database_exists(database_path):
+        database.create_all()
 
 
 def create_app():
@@ -23,7 +29,7 @@ def create_app():
     # initialize extensions utilities inside app_context
     with app.app_context():
         from task import get_data_from_web_page
-        db.create_all()
+        createDB(app.config["SQLALCHEMY_DATABASE_URI"] , db)
         scheduler.start()
         
     return app
