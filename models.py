@@ -22,3 +22,4 @@ class BookSchema(marshmallow.SQLAlchemySchema):
     title_for_route = marshmallow.auto_field()
     price = marshmallow.auto_field()
     url = marshmallow.auto_field()
+

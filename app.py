@@ -13,7 +13,8 @@ def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["DEBUG"] = True
+    app.config["DEBUG"] = False
+    app.config["USE_RELOADER"] = False
     app.config["SCHEDULER_API_ENABLED"] = True
 
     # register blueprint
