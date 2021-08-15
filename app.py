@@ -1,5 +1,5 @@
 from flask import Flask
-from extensions import db, scheduler
+from extensions import (db,scheduler,marshmallow)
 
 
 def create_app():
@@ -15,15 +15,17 @@ def create_app():
     app.register_blueprint(main)
 
     # initialize extensions
-    scheduler.init_app(app)
     db.init_app(app)
+    scheduler.init_app(app)
+    marshmallow.init_app(app)
+
 
     # initialize extensions utilities inside app_context
     with app.app_context():
         from task import get_data_from_web_page
-        scheduler.start()
         db.create_all()
-
+        scheduler.start()
+        
     return app
 
 

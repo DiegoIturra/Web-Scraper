@@ -16,7 +16,7 @@ class Scraper:
         return bookNames
 
     # Get original price for every book
-    def __getBookPrices(self, soup: BeautifulSoup) -> list[str]:
+    def __get_book_prices(self, soup: BeautifulSoup) -> list[str]:
         prices = []
         for divtag in soup.find_all('div', {'class': 'price__regular'}):
             for spanTag in divtag.find('span', {'class': 'price-item price-item--regular'}):
@@ -49,7 +49,7 @@ class Scraper:
             soup = BeautifulSoup(request.text, 'html.parser')
 
             currentBookNames = self.__get_book_names(soup)
-            currentBookPrices = self.__getBookPrices(soup)
+            currentBookPrices = self.__get_book_prices(soup)
             currentBookLinks = self.__getBookLink(soup)
 
             # get title of books
